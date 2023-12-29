@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Category;
 use App\Http\Requests\CategoryRequest;
+use App\Product;
 use App\Traits\ResponseTrait;
 
 class CategoryController
@@ -44,8 +45,11 @@ class CategoryController
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
-        $category->delete();
+        if(!Product::where('category_id', $id)->exists()) {
+            $category->delete();
+            return $this->successResponse('Category Deleted Successfully');
+        }
         
-        return $this->successResponse('Category Deleted Successfully');
+        return $this->errorResponse('Category already exists for products');
     }
 }
