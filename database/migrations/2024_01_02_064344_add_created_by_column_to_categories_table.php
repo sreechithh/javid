@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddApiTokenToAdminsTable extends Migration
+class AddCreatedByColumnToCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddApiTokenToAdminsTable extends Migration
      */
     public function up()
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->string('api_token', 300)->unique()->after('password')->nullable();
+        Schema::table('categories', function (Blueprint $table) {
+            $table->integer('created_by')->after('name')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddApiTokenToAdminsTable extends Migration
      */
     public function down()
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->dropColumn('api_token');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropColumn('created_by');
         });
     }
 }

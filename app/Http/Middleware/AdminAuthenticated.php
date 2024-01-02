@@ -2,25 +2,19 @@
 
 namespace App\Http\Middleware;
 
-use App\Admin;
 use Closure;
-use Illuminate\Support\Facades\Auth;
-
+use App\Traits\ResponseTrait;
+use Tymon\JWTAuth\Facades\JWTAuth;
 class AdminAuthenticated
 {
+    use ResponseTrait;
 
     public function handle($request, Closure $next)
     {
-        $token = $request->bearerToken();
-    
-        if (!$token) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-        
-        if (Admin::where('api_token', $token)->exists()) {
+        if (JWTAuth::parseToken()->authenticate()) {            
             return $next($request);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return $this->errorResponse(['error' => 'Unauthorized'], [], 401);
     }
 }

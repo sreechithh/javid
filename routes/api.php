@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', "Api\AdminController@login");
-Route::get('products', 'Api\ProductController@index')->name('products');
-Route::get('categories', 'Api\CategoryController@index')->name('categories');
+Route::resource('products', 'Api\ProductController')->except(['store', 'update', 'delete']);
+Route::resource('categories', 'Api\CategoryController')->except(['store', 'update', 'delete']);
 
 Route::group(['middleware' => 'admin'], function(){
-    Route::resource('products', "Api\ProductController")->except('index');
-    Route::resource('categories', "Api\CategoryController")->except('index');
+    Route::resource('products', "Api\ProductController")->except(['index', 'edit']);
+    Route::resource('categories', "Api\CategoryController")->except(['index', 'edit']);
 });
 
